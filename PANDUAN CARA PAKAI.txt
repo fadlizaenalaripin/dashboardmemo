@@ -1,0 +1,70 @@
+╔══════════════════════════════════════════════════════════╗
+║         MOMEN MARKETING MONITOR — PANDUAN CEPAT         ║
+╚══════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CARA MEMBUKA DASHBOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✅ CARA TERMUDAH (Rekomendasi):
+     Double-click file: "JALANKAN DASHBOARD.bat"
+     → Otomatis membuka di Chrome atau Edge
+     → Semua fitur langsung berfungsi
+
+  📁 ATAU buka manual:
+     Double-click file: "Marketing Monitor.html"
+     (Langsung jalan di browser manapun tanpa instalasi)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ISI DASHBOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ⊞  Ringkasan     → KPI semua akun, grafik pertumbuhan
+  📷 Instagram     → Detail 2 akun IG (@momen.officialid, @momengangs)
+  🎵 TikTok        → Detail 2 akun TT (@momenbatik, women)
+  ⚖️ Perbandingan  → Tabel & ranking semua akun
+  📝 Rencana Konten → Kelola ide konten, ubah status
+  📊 Laporan       → Download data ke Excel/CSV
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  METRIK YANG DIPANTAU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  • Profile Visits (Kunjungan Profil)
+  • Reach (Jangkauan)
+  • Impressions (Tampilan)
+  • Engagement Rate
+  • Likes, Komentar, Shares, Saves
+  • Story Views & Reel Plays (Instagram)
+  • Video Views (TikTok)
+  • Pertumbuhan Followers
+  • Profil Audiens: Gender, Usia, Kota
+  • Konten Terbaik per Akun
+  • Waktu Terbaik untuk Posting
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STRUKTUR FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  marketing-monitor/
+  ├── index.html         → File utama (buka ini)
+  ├── css/
+  │   └── styles.css     → Tampilan & desain
+  └── js/
+      ├── data.js        → Data akun & metrik
+      ├── components.js  → Komponen chart & card
+      ├── pages.js       → Halaman-halaman
+      └── app.js         → Aplikasi utama
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  • Gunakan tombol 7 Hari / 30 Hari / 90 Hari untuk ganti periode
+  • Hover di grafik untuk melihat detail angka
+  • Di halaman Laporan, klik "Download CSV" untuk export ke Excel
+  • Di halaman Konten, bisa tambah/hapus/ubah status ide konten
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  © 2026 BT Batik Trusmi · Momen Marketing Team
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard MOMEN – Sales & Marketing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f0f;
+      --sidebar-bg: #111111;
+      --card-bg: #1a1a1a;
+      --card-border: #2a2a2a;
+      --gold: #C9A84C;
+      --gold-light: #E8C878;
+      --gold-dark: #A07830;
+      --gold-muted: #8B6914;
+      --text-white: #FFFFFF;
+      --text-light: #E0D8C8;
+      --text-muted: #8a8070;
+      --text-dim: #555045;
+      --red: #E05555;
+      --green: #4CAF50;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html, body, #root {
+      height: 100%;
+      background: var(--bg);
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-white);
+      overflow: hidden;
+    }
+
+    /* ── LAYOUT ── */
+    .app-layout {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 180px;
+      min-width: 180px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .sidebar-logo {
+      padding: 20px 16px 14px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .logo-brand {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .logo-sub {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 10px 0;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item:hover {
+      color: var(--text-light);
+      background: rgba(201, 168, 76, 0.06);
+    }
+
+    .nav-item.active {
+      color: var(--gold);
+      background: rgba(201, 168, 76, 0.1);
+      border-left-color: var(--gold);
+      font-weight: 700;
+    }
+
+    .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+    /* SIDEBAR FILTER */
+    .sidebar-filter {
+      padding: 14px 14px 20px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .filter-section-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .filter-reset {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--gold);
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    .filter-group { margin-bottom: 10px; }
+
+    .filter-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .filter-select {
+      width: 100%;
+      background: #222;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 11px;
+      color: var(--text-light);
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .filter-select:focus { border-color: var(--gold); }
+
+    .filter-btn {
+      width: 100%;
+      background: var(--gold);
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      padding: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      font-family: 'Outfit', sans-serif;
+      transition: background 0.15s;
+    }
+
+    .filter-btn:hover { background: var(--gold-light); }
+
+    /* ── MAIN ── */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: #111;
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .header-title-block {}
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+
+    .header-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .date-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1e1e1e;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    .date-pill span { color: var(--gold); font-size: 13px; }
+
+    .compare-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #1e1e1e;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .compare-pill strong { color: var(--text-light); font-size: 11px; }
+
+    .last-update {
+      font-size: 10.5px;
+      color: var(--text-dim);
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .last-update span { color: var(--text-muted); font-size: 10px; }
+
+    .refresh-btn {
+      background: none;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: var(--gold);
+      padding: 5px 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.15s;
+    }
+
+    .refresh-btn:hover { background: rgba(201,168,76,0.1); }
+
+    /* ── DASHBOARD BODY ── */
+    .dashboard-body {
+      padding: 16px 20px;
+      flex: 1;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+
+    /* ── SALES OVERVIEW ── */
+    .sales-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--gold-muted);
+      transform: translateY(-2px);
+    }
+
+    .stat-card-icon {
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: var(--gold);
+    }
+
+    .stat-card-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .stat-card-value {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-white);
+      line-height: 1.2;
+    }
+
+    .stat-card-value.gold { color: var(--gold); }
+
+    .stat-card-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .stat-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 4px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .badge-up { background: rgba(76,175,80,0.15); color: var(--green); }
+    .badge-down { background: rgba(224,85,85,0.15); color: var(--red); }
+
+    .stat-card-detail-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 4px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ── TWO COLUMN ROW ── */
+    .row-two-col {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    /* ── CHART CARD ── */
+    .chart-card-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 20px;
+      height: 2px;
+      border-radius: 2px;
+    }
+
+    .legend-dot.dashed {
+      background: repeating-linear-gradient(90deg, #C9A84C 0, #C9A84C 4px, transparent 4px, transparent 8px);
+    }
+
+    /* ── SALES BREAKDOWN ── */
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .breakdown-donut-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 12px 10px;
+    }
+
+    .breakdown-title {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .donut-wrapper {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 8px;
+    }
+
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .donut-center-value {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--text-white);
+      line-height: 1.2;
+    }
+
+    .breakdown-legend { margin-top: 4px; }
+
+    .breakdown-legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 9.5px;
+      margin-bottom: 4px;
+    }
+
+    .breakdown-legend-left {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-muted);
+    }
+
+    .breakdown-legend-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .breakdown-legend-pct {
+      color: var(--text-light);
+      font-weight: 700;
+    }
+
+    /* ── BOTTOM THREE COLS ── */
+    .row-three-col {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    /* ── TOP BEST SELLER ── */
+    .best-seller-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .best-seller-table th {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 0 6px 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .best-seller-table th:last-child { text-align: right; }
+
+    .best-seller-table td {
+      font-size: 11px;
+      padding: 7px 6px;
+      color: var(--text-light);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .best-seller-table tr:last-child td { border-bottom: none; }
+
+    .best-seller-table td:last-child { text-align: right; color: var(--gold); font-weight: 700; }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(201,168,76,0.15);
+      color: var(--gold);
+    }
+
+    .rank-badge.rank-1 { background: rgba(201,168,76,0.3); }
+
+    /* ── LEADS OVERVIEW ── */
+    .leads-kpi-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .leads-kpi-item {
+      flex: 1;
+      background: #111;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+
+    .leads-kpi-label {
+      font-size: 9px;
+      color: var(--text-dim);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .leads-kpi-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .leads-funnel {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .leads-funnel-item {
+      flex: 1;
+      text-align: center;
+    }
+
+    .funnel-box {
+      padding: 8px 4px;
+      border-radius: 8px;
+      font-size: 9.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .funnel-box.leads { background: rgba(201,168,76,0.25); border: 1px solid var(--gold); }
+    .funnel-box.qualified { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); }
+    .funnel-box.kontak { background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.25); }
+    .funnel-box.transaksi { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.15); }
+
+    .funnel-label { font-size: 8.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+    .funnel-value { font-size: 18px; font-weight: 900; color: var(--text-white); }
+    .funnel-sub { font-size: 9px; color: var(--text-muted); }
+
+    .leads-stats-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .leads-stat {
+      flex: 1;
+      background: #111;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      text-align: center;
+    }
+
+    .leads-stat-label { font-size: 8.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.3px; }
+    .leads-stat-val { font-size: 15px; font-weight: 800; color: var(--gold); }
+
+    /* Lead icons */
+    .lead-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .lead-row:last-child { border-bottom: none; }
+
+    .lead-icon { font-size: 18px; }
+    .lead-info-label { font-size: 10px; color: var(--text-muted); font-weight: 600; }
+    .lead-info-val { font-size: 14px; font-weight: 800; color: var(--text-white); }
+    .lead-badge { display: inline-flex; align-items: center; gap: 2px; font-size: 9.5px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+
+    /* NOTE */
+    .dashboard-note {
+      font-size: 10px;
+      color: var(--text-dim);
+      padding: 10px 20px 16px;
+      border-top: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-muted); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo } = React;
+
+    /* ════════════════════════════════════════
+       DATA
+    ════════════════════════════════════════ */
+    const DATA = {
+      period: '01 – 13 Juli 2026',
+      compare: '1 – 13 Juni 2026',
+      lastUpdate: '13 Juli 2026 · 15:07',
+      salesOverview: {
+        target: 'Rp 540.000.000',
+        achievement: { pct: '37,38%', value: 'Rp 201.838.726' },
+        qty: { value: '1.248', change: -8.3 },
+        transaksi: { value: '236', change: 12.6 },
+        basket: { value: 'Rp 855.248', change: 5.2 },
+      },
+      trendLabels: Array.from({length:13},(_,i)=> `${i+1} Jul`),
+      trendTarget: [12,25,37,50,62,75,87,100,112,125,137,150,162].map(v=>v*1000000),
+      trendActual: [8,18,30,45,58,70,82,95,108,120,135,148,162].map(v=>v*985000),
+      breakdown: {
+        channel: {
+          labels: ['WhatsApp','Instagram','Marketplace','Offline Store','Lainnya'],
+          data: [45.7,27.3,15.5,8.6,2.9],
+          colors: ['#C9A84C','#E8C878','#A07830','#8B6914','#4a3a10'],
+        },
+        produk: {
+          labels: ['Momen Men','Momen Women','Accessories','Limited Ed.'],
+          data: [62.1,21.3,9.8,6.8],
+          colors: ['#C9A84C','#E8C878','#A07830','#8B6914'],
+        },
+        customer: {
+          labels: ['New Customer','Repeat Customer'],
+          data: [64.2,35.8],
+          colors: ['#C9A84C','#8B6914'],
+        },
+        area: {
+          labels: ['Jawa Barat','Jawa Tengah','Jabodetabek','Jawa Timur','Lainnya'],
+          data: [48.2,22.7,18.6,6.1,4.4],
+          colors: ['#C9A84C','#E8C878','#A07830','#8B6914','#4a3a10'],
+        },
+      },
+      bestSeller: [
+        { rank:1, name:'Kemeja Batik Momen Classic', qty:248, revenue:'Rp 42.350.000' },
+        { rank:2, name:'Outer Batik Momen Premium', qty:186, revenue:'Rp 35.180.000' },
+        { rank:3, name:'Tunik Batik Wanita Momen', qty:152, revenue:'Rp 28.920.000' },
+        { rank:4, name:'Hem Batik Lengan Pendek', qty:134, revenue:'Rp 21.480.000' },
+        { rank:5, name:'Scarf Batik Eksklusif', qty:98, revenue:'Rp 15.760.000' },
+      ],
+      leads: {
+        total: { value: '1.842', change: 14.2 },
+        qualified: { value: '612', change: 9.8 },
+        kontak: { value: '418', change: 6.4 },
+        transaksi: '236',
+        conversionRate: '12,8%',
+        closingRate: '38,5%',
+        winRate: '56,5%',
+      },
+      channelBar: {
+        labels: ['WhatsApp','Instagram','Marketplace','Offline Store','Lainnya'],
+        data: [92.1,54.9,31.2,17.3,6.3],
+      },
+    };
+
+    /* ════════════════════════════════════════
+       REUSABLE CHART HOOK
+    ════════════════════════════════════════ */
+    function useChart(ref, config) {
+      const chartRef = useRef(null);
+      useEffect(() => {
+        if (!ref.current) return;
+        if (chartRef.current) chartRef.current.destroy();
+        chartRef.current = new Chart(ref.current, config);
+        return () => { if (chartRef.current) chartRef.current.destroy(); };
+      }, []);
+    }
+
+    /* ════════════════════════════════════════
+       DONUT CHART COMPONENT
+    ════════════════════════════════════════ */
+    function DonutChart({ id, labels, data, colors, centerText }) {
+      const canvasRef = useRef(null);
+      useEffect(() => {
+        if (!canvasRef.current) return;
+        const chart = new Chart(canvasRef.current, {
+          type: 'doughnut',
+          data: {
+            labels,
+            datasets: [{
+              data,
+              backgroundColor: colors,
+              borderWidth: 2,
+              borderColor: '#1a1a1a',
+              hoverOffset: 4,
+            }]
+          },
+          options: {
+            cutout: '72%',
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => ` ${ctx.label}: ${ctx.parsed}%`
+                },
+                backgroundColor: '#222',
+                titleColor: '#C9A84C',
+                bodyColor: '#E0D8C8',
+                borderColor: '#333',
+                borderWidth: 1,
+              }
+            },
+            animation: { animateRotate: true, duration: 900 },
+          }
+        });
+        return () => chart.destroy();
+      }, []);
+
+      return (
+        <div className="donut-wrapper">
+          <canvas ref={canvasRef} />
+          <div className="donut-center">
+            <div className="donut-center-value">{centerText}</div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       SALES TREND CHART
+    ════════════════════════════════════════ */
+    function SalesTrendChart() {
+      const canvasRef = useRef(null);
+
+      useEffect(() => {
+        if (!canvasRef.current) return;
+        const chart = new Chart(canvasRef.current, {
+          type: 'line',
+          data: {
+            labels: DATA.trendLabels,
+            datasets: [
+              {
+                label: 'Target',
+                data: DATA.trendTarget,
+                borderColor: '#C9A84C',
+                borderDash: [6, 4],
+                borderWidth: 1.5,
+                pointRadius: 0,
+                tension: 0.4,
+                fill: false,
+              },
+              {
+                label: 'Actual',
+                data: DATA.trendActual,
+                borderColor: '#E8C878',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.4,
+                fill: {
+                  target: 'origin',
+                  above: 'rgba(201,168,76,0.08)',
+                },
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                mode: 'index',
+                intersect: false,
+                backgroundColor: '#1e1e1e',
+                titleColor: '#C9A84C',
+                bodyColor: '#E0D8C8',
+                borderColor: '#333',
+                borderWidth: 1,
+                callbacks: {
+                  label: (ctx) => {
+                    const val = (ctx.raw / 1000000).toFixed(1);
+                    return ` ${ctx.dataset.label}: Rp ${val} jt`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                ticks: { color: '#555045', font: { size: 9, family: 'Outfit' }, maxRotation: 0 },
+                border: { display: false },
+              },
+              y: {
+                grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                ticks: {
+                  color: '#555045',
+                  font: { size: 9, family: 'Outfit' },
+                  callback: (v) => `Rp ${(v/1000000).toFixed(0)} jt`
+                },
+                border: { display: false },
+              }
+            },
+            interaction: { mode: 'index', intersect: false },
+          }
+        });
+        return () => chart.destroy();
+      }, []);
+
+      return (
+        <div style={{ height: '180px', position: 'relative' }}>
+          <canvas ref={canvasRef} />
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       SALES BY CHANNEL BAR CHART
+    ════════════════════════════════════════ */
+    function ChannelBarChart() {
+      const canvasRef = useRef(null);
+
+      useEffect(() => {
+        if (!canvasRef.current) return;
+        const chart = new Chart(canvasRef.current, {
+          type: 'bar',
+          data: {
+            labels: DATA.channelBar.labels,
+            datasets: [{
+              label: 'Revenue (jt)',
+              data: DATA.channelBar.data,
+              backgroundColor: ['#C9A84C','#A07830','#8B6914','#6B4F10','#4a3a10'],
+              borderRadius: 4,
+              borderSkipped: false,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#1e1e1e',
+                titleColor: '#C9A84C',
+                bodyColor: '#E0D8C8',
+                borderColor: '#333',
+                borderWidth: 1,
+                callbacks: {
+                  label: (ctx) => ` Rp ${ctx.parsed.y} jt`
+                }
+              },
+              datalabels: { display: false }
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: { color: '#555045', font: { size: 9, family: 'Outfit' } },
+                border: { display: false },
+              },
+              y: {
+                grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                ticks: { color: '#555045', font: { size: 9, family: 'Outfit' }, callback: (v) => `Rp ${v} jt` },
+                border: { display: false },
+              }
+            }
+          }
+        });
+        return () => chart.destroy();
+      }, []);
+
+      return (
+        <div style={{ height: '160px', position: 'relative' }}>
+          <canvas ref={canvasRef} />
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       SIDEBAR
+    ════════════════════════════════════════ */
+    const navItems = [
+      { icon: '⊞', label: 'Overview', active: true },
+      { icon: '📊', label: 'Sales' },
+      { icon: '📢', label: 'Marketing' },
+      { icon: '👥', label: 'Leads' },
+      { icon: '⭐', label: 'Top Seller' },
+      { icon: '🗄️', label: 'Database' },
+      { icon: '👗', label: 'Produk' },
+      { icon: '📋', label: 'Detail' },
+    ];
+
+    function Sidebar({ activeNav, setActiveNav }) {
+      return (
+        <aside className="sidebar">
+          <div className="sidebar-logo">
+            <div className="logo-brand">MOMEN</div>
+            <div className="logo-sub">by BT Batik Trusmi</div>
+          </div>
+
+          <nav className="sidebar-nav">
+            {navItems.map(item => (
+              <div
+                key={item.label}
+                className={`nav-item ${activeNav === item.label ? 'active' : ''}`}
+                onClick={() => setActiveNav(item.label)}
+              >
+                <span className="nav-icon">{item.icon}</span>
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </nav>
+
+          <div className="sidebar-filter">
+            <div className="filter-section-title">
+              <span>⚙</span> Filter
+            </div>
+            <div className="filter-reset">
+              <span>↺</span> Reset Filter
+            </div>
+            <div className="filter-group">
+              <label className="filter-label">Periode</label>
+              <select className="filter-select">
+                <option>01 – 13 Juli 2026</option>
+                <option>01 – 30 Juni 2026</option>
+                <option>01 – 31 Mei 2026</option>
+              </select>
+            </div>
+            <div className="filter-group">
+              <label className="filter-label">Channel</label>
+              <select className="filter-select">
+                <option>Semua Channel</option>
+                <option>WhatsApp</option>
+                <option>Instagram</option>
+                <option>Marketplace</option>
+                <option>Offline Store</option>
+              </select>
+            </div>
+            <div className="filter-group">
+              <label className="filter-label">Jenis Produk</label>
+              <select className="filter-select">
+                <option>Semua Jenis</option>
+                <option>Momen Men</option>
+                <option>Momen Women</option>
+                <option>Accessories</option>
+                <option>Limited Edition</option>
+              </select>
+            </div>
+            <button className="filter-btn">Terapkan Filter</button>
+          </div>
+        </aside>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       HEADER
+    ════════════════════════════════════════ */
+    function Header() {
+      return (
+        <header className="header">
+          <div className="header-title-block">
+            <div className="header-title">DASHBOARD MOMEN</div>
+            <div className="header-subtitle">SALES &amp; MARKETING OVERVIEW</div>
+          </div>
+          <div className="header-controls">
+            <div className="date-pill">
+              <span>📅</span>
+              <strong>{DATA.period}</strong>
+            </div>
+            <div className="compare-pill">
+              Bandingkan dengan
+              <strong>{DATA.compare}</strong>
+              <span>▾</span>
+            </div>
+            <div className="last-update">
+              <span>Last Update</span>
+              <strong style={{color:'#E0D8C8',fontSize:'11px'}}>{DATA.lastUpdate}</strong>
+            </div>
+            <button className="refresh-btn" title="Refresh">↻</button>
+          </div>
+        </header>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       SALES OVERVIEW CARDS
+    ════════════════════════════════════════ */
+    function SalesOverviewSection() {
+      const cards = [
+        {
+          icon: '🎯',
+          label: 'TARGET BULANAN',
+          value: DATA.salesOverview.target,
+          sub: '—',
+          valueClass: '',
+        },
+        {
+          icon: '⬤',
+          label: 'ACHIEVEMENT (MTD)',
+          value: DATA.salesOverview.achievement.pct,
+          sub: DATA.salesOverview.achievement.value,
+          valueClass: 'gold',
+          isDonut: true,
+        },
+        {
+          icon: '🛍️',
+          label: 'QTY TERJUAL',
+          value: DATA.salesOverview.qty.value,
+          change: DATA.salesOverview.qty.change,
+        },
+        {
+          icon: '🛒',
+          label: 'TRANSAKSI',
+          value: DATA.salesOverview.transaksi.value,
+          change: DATA.salesOverview.transaksi.change,
+        },
+        {
+          icon: '🧺',
+          label: 'BASKET SIZE',
+          value: DATA.salesOverview.basket.value,
+          change: DATA.salesOverview.basket.change,
+        },
+        {
+          icon: '🏆',
+          label: 'TOP 5 BEST SELLER',
+          value: null,
+          isLink: true,
+        },
+      ];
+
+      return (
+        <div style={{ marginBottom: '14px' }}>
+          <div className="section-header">Sales Overview</div>
+          <div className="sales-overview-grid">
+            {cards.map((card, i) => (
+              <div className="stat-card" key={i}>
+                <div className="stat-card-icon">{card.icon}</div>
+                <div className="stat-card-label">{card.label}</div>
+                {card.isLink ? (
+                  <>
+                    <div style={{ height: 10 }} />
+                    <div className="stat-card-detail-link">Lihat Detail →</div>
+                  </>
+                ) : (
+                  <>
+                    <div className={`stat-card-value ${card.valueClass || ''}`}>
+                      {card.value}
+                    </div>
+                    {card.sub && <div className="stat-card-sub">{card.sub}</div>}
+                    {card.change !== undefined && (
+                      <div className={`stat-card-badge ${card.change >= 0 ? 'badge-up' : 'badge-down'}`}>
+                        {card.change >= 0 ? '▲' : '▼'} {Math.abs(card.change)}%
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       SALES TREND + BREAKDOWN SECTION
+    ════════════════════════════════════════ */
+    function SalesTrendSection() {
+      return (
+        <div className="row-two-col">
+          {/* Trend */}
+          <div className="card">
+            <div className="chart-card-title">Sales Trend (Achievement)</div>
+            <div className="chart-legend">
+              <div className="legend-item">
+                <div className="legend-dot dashed" style={{ background: 'none' }} />
+                <span>Target</span>
+              </div>
+              <div className="legend-item">
+                <div className="legend-dot" style={{ background: '#E8C878' }} />
+                <span>Actual</span>
+              </div>
+            </div>
+            <SalesTrendChart />
+          </div>
+
+          {/* Breakdown */}
+          <div className="card">
+            <div className="chart-card-title">Sales Breakdown</div>
+            <div className="breakdown-grid">
+              {[
+                { title: 'By Channel', key: 'channel' },
+                { title: 'By Jenis Produk', key: 'produk' },
+                { title: 'By Customer Type', key: 'customer' },
+                { title: 'By Area', key: 'area' },
+              ].map(({ title, key }) => {
+                const bd = DATA.breakdown[key];
+                return (
+                  <div className="breakdown-donut-card" key={key}>
+                    <div className="breakdown-title">{title}</div>
+                    <DonutChart
+                      id={`donut-${key}`}
+                      labels={bd.labels}
+                      data={bd.data}
+                      colors={bd.colors}
+                      centerText={'Rp\n201,8 jt'}
+                    />
+                    <div className="breakdown-legend">
+                      {bd.labels.slice(0, 4).map((label, i) => (
+                        <div className="breakdown-legend-item" key={i}>
+                          <div className="breakdown-legend-left">
+                            <div className="breakdown-legend-dot" style={{ background: bd.colors[i] }} />
+                            <span style={{ color: '#888', fontSize: '9px' }}>{label}</span>
+                          </div>
+                          <span className="breakdown-legend-pct">{bd.data[i]}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       TOP BEST SELLER
+    ════════════════════════════════════════ */
+    function TopBestSeller() {
+      return (
+        <div className="card" style={{ height: '100%' }}>
+          <div className="chart-card-title">🏆 Top 5 Best Seller</div>
+          <table className="best-seller-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Produk</th>
+                <th style={{ textAlign: 'right' }}>QTY</th>
+                <th>Pendapatan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {DATA.bestSeller.map(row => (
+                <tr key={row.rank}>
+                  <td>
+                    <span className={`rank-badge ${row.rank === 1 ? 'rank-1' : ''}`}>
+                      {row.rank}
+                    </span>
+                  </td>
+                  <td style={{ color: '#C8C0B0', fontSize: '11px' }}>{row.name}</td>
+                  <td style={{ textAlign: 'right', color: '#E0D8C8' }}>{row.qty}</td>
+                  <td>{row.revenue}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       LEADS OVERVIEW
+    ════════════════════════════════════════ */
+    function LeadsOverview() {
+      const funnelSteps = [
+        { label: 'LEADS', value: DATA.leads.total.value, change: DATA.leads.total.change, cls: 'leads' },
+        { label: 'QUALIFIED', value: DATA.leads.qualified.value, change: DATA.leads.qualified.change, cls: 'qualified' },
+        { label: 'KONTAK', value: DATA.leads.kontak.value, change: DATA.leads.kontak.change, cls: 'kontak' },
+        { label: 'TRANSAKSI', value: DATA.leads.transaksi, cls: 'transaksi' },
+      ];
+
+      const leadsRows = [
+        { icon: '👥', label: 'TOTAL LEADS', value: DATA.leads.total.value, change: DATA.leads.total.change },
+        { icon: '✅', label: 'QUALIFIED LEADS', value: DATA.leads.qualified.value, change: DATA.leads.qualified.change },
+        { icon: '📞', label: 'KONTAK / FOLLOW UP', value: DATA.leads.kontak.value, change: DATA.leads.kontak.change },
+      ];
+
+      return (
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div className="chart-card-title">Leads Overview</div>
+
+          {/* Lead rows */}
+          {leadsRows.map(r => (
+            <div className="lead-row" key={r.label}>
+              <div className="lead-icon">{r.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div className="lead-info-label">{r.label}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span className="lead-info-val">{r.value}</span>
+                  {r.change !== undefined && (
+                    <span className={`lead-badge ${r.change >= 0 ? 'badge-up' : 'badge-down'}`}>
+                      {r.change >= 0 ? '▲' : '▼'} {Math.abs(r.change)}%
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Funnel boxes */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 6, marginTop: 4 }}>
+            {funnelSteps.map(step => (
+              <div key={step.label} style={{ textAlign: 'center' }}>
+                <div className={`funnel-box ${step.cls}`}>
+                  <div className="funnel-label">{step.label}</div>
+                  <div className="funnel-value">{step.value}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* KPIs */}
+          <div className="leads-stats-row">
+            {[
+              { label: 'CONVERSION RATE', val: DATA.leads.conversionRate },
+              { label: 'CLOSING RATE', val: DATA.leads.closingRate },
+              { label: 'WIN RATE', val: DATA.leads.winRate },
+            ].map(k => (
+              <div className="leads-stat" key={k.label}>
+                <div className="leads-stat-label">{k.label}</div>
+                <div className="leads-stat-val">{k.val}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       SALES BY CHANNEL MTD
+    ════════════════════════════════════════ */
+    function SalesByChannelMTD() {
+      return (
+        <div className="card" style={{ height: '100%' }}>
+          <div className="chart-card-title">Sales by Channel (MTD)</div>
+          <ChannelBarChart />
+          <div style={{ display: 'flex', gap: 6, marginTop: 8, flexWrap: 'wrap' }}>
+            {DATA.channelBar.labels.map((l, i) => (
+              <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 9 }}>
+                <div style={{ width: 8, height: 8, borderRadius: 2, background: ['#C9A84C','#A07830','#8B6914','#6B4F10','#4a3a10'][i] }} />
+                <span style={{ color: '#666' }}>{l}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       OVERVIEW PAGE
+    ════════════════════════════════════════ */
+    function OverviewPage() {
+      return (
+        <div className="dashboard-body">
+          <SalesOverviewSection />
+          <SalesTrendSection />
+          <div className="row-three-col">
+            <TopBestSeller />
+            <LeadsOverview />
+            <SalesByChannelMTD />
+          </div>
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       OTHER PAGE PLACEHOLDER
+    ════════════════════════════════════════ */
+    function PlaceholderPage({ name }) {
+      return (
+        <div className="dashboard-body" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16, minHeight: 400 }}>
+          <div style={{ fontSize: 48, color: 'var(--gold)', opacity: 0.4 }}>📊</div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-muted)' }}>{name}</div>
+          <div style={{ fontSize: 13, color: 'var(--text-dim)' }}>Halaman ini akan segera tersedia</div>
+        </div>
+      );
+    }
+
+    /* ════════════════════════════════════════
+       APP ROOT
+    ════════════════════════════════════════ */
+    function App() {
+      const [activeNav, setActiveNav] = useState('Overview');
+
+      const renderPage = () => {
+        if (activeNav === 'Overview') return <OverviewPage />;
+        return <PlaceholderPage name={activeNav} />;
+      };
+
+      return (
+        <div className="app-layout">
+          <Sidebar activeNav={activeNav} setActiveNav={setActiveNav} />
+          <div className="main-content">
+            <Header />
+            {renderPage()}
+            <div className="dashboard-note">
+              📌 Catatan: Data real-time berdasarkan sistem internal. Klik pada setiap visual untuk melihat detail lebih lanjut.
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* MOUNT */
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
