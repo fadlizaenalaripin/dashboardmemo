@@ -175,6 +175,120 @@ export function BarChart({ labels, data, label = 'Data', color = '#C9A84C', heig
   );
 }
 
+export function MultiBarChart({ labels, datasets, height = 200 }) {
+  const canvasRef = useRef(null);
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    if (chartRef.current) chartRef.current.destroy();
+
+    chartRef.current = new Chart(canvasRef.current, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: datasets.map(d => ({
+          borderRadius: 6,
+          borderSkipped: false,
+          ...d
+        }))
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            align: 'end',
+            labels: { color: '#8a8070', font: { family: 'Outfit', size: 11 }, boxWidth: 12, usePointStyle: true }
+          },
+          tooltip: {
+            backgroundColor: '#222',
+            titleColor: '#C9A84C',
+            bodyColor: '#E0D8C8',
+            borderColor: '#333',
+            borderWidth: 1,
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#8a8070', font: { family: 'Outfit', size: 10 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8a8070', font: { family: 'Outfit', size: 10 } } }
+        }
+      }
+    });
+
+    return () => { if (chartRef.current) chartRef.current.destroy(); };
+  }, [labels, datasets, height]);
+
+  return (
+    <div style={{ position: 'relative', height, width: '100%' }}>
+      <canvas ref={canvasRef} />
+    </div>
+  );
+}
+
+export function ComboBarLineChart({ labels, datasets, height = 260 }) {
+  const canvasRef = useRef(null);
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    if (chartRef.current) chartRef.current.destroy();
+
+    chartRef.current = new Chart(canvasRef.current, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: datasets.map(d => ({
+          borderRadius: 6,
+          borderSkipped: false,
+          ...d
+        }))
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            align: 'end',
+            labels: { color: '#8a8070', font: { family: 'Outfit', size: 11 }, boxWidth: 12, usePointStyle: true }
+          },
+          tooltip: {
+            backgroundColor: '#222',
+            titleColor: '#C9A84C',
+            bodyColor: '#E0D8C8',
+            borderColor: '#333',
+            borderWidth: 1,
+            padding: 10
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#8a8070', font: { family: 'Outfit', size: 10 } } },
+          y: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: {
+              color: '#8a8070',
+              font: { family: 'Outfit', size: 10 },
+              callback: (value) => value >= 1000000 ? (value / 1000000) + ' Jt' : value
+            }
+          }
+        }
+      }
+    });
+
+    return () => { if (chartRef.current) chartRef.current.destroy(); };
+  }, [labels, datasets, height]);
+
+  return (
+    <div style={{ position: 'relative', height, width: '100%' }}>
+      <canvas ref={canvasRef} />
+    </div>
+  );
+}
+
 export function DonutChart({ labels, data, colors, centerText, segments, cVal, cLabel, size }) {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
