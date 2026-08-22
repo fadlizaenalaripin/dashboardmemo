@@ -19,49 +19,55 @@ export function Sidebar({ active, onNav, mobileOpen, onClose }) {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0,0,0,0.5)',
+            background: 'rgba(9, 13, 22, 0.75)',
             zIndex: 190,
-            backdropFilter: 'blur(2px)',
+            backdropFilter: 'blur(4px)',
             transition: 'opacity 0.3s'
           }}
         />
       )}
       <aside className={`sidebar${mobileOpen ? ' mobile-open' : ''}`}>
-        <div className="sb-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div className="sb-logo-img" style={{ background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-              <img src="/asset/logo-momen.png" alt="Momen" style={{ width: '34px', height: '34px', objectFit: 'contain' }} />
+        <div className="sb-logo">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div className="sb-logo-img">
+                <img src="/asset/logo-momen.png" alt="Momen" />
+              </div>
+              <div>
+                <div className="sb-brand">MOMEN</div>
+                <div className="sb-tagline">Dashboard Monitor</div>
+              </div>
             </div>
-            <div>
-              <div className="sb-brand">MOMEN</div>
-              <div className="sb-tagline">Dashboard Monitor</div>
-            </div>
+            <button 
+              className="mobile-toggle"
+              style={{
+                background: 'none',
+                border: 'none',
+                fontSize: 18,
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                display: 'none',
+                outline: 'none'
+              }}
+              onClick={onClose}
+            >
+              ✕
+            </button>
           </div>
-          <button 
-            className="mobile-toggle"
-            style={{
-              background: 'none',
-              border: 'none',
-              fontSize: 20,
-              color: 'rgba(255,255,255,0.4)',
-              cursor: 'pointer',
-              display: 'none',
-              outline: 'none'
-            }}
-            onClick={onClose}
-          >
-            ✕
-          </button>
         </div>
         
-        <div className="sb-nav" style={{ marginTop: 10 }}>
+        <div className="sb-nav">
           {Object.entries(secs).map(([key, label], idx) => (
             <div key={key}>
-              {idx > 0 && <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', margin: '8px 10px' }} />}
-              <div className="sb-section" style={{ padding: '8px 12px 4px' }}>{label}</div>
+              {idx > 0 && <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', margin: '10px 8px' }} />}
+              <div className="sb-section">{label}</div>
               {NAV.filter(n => n.sec === key).map(n => (
-                <div key={n.id} className={`nav-item${active === n.id ? ' active' : ''}`} onClick={() => { onNav(n.id); onClose(); }}>
-                  <span className="nav-icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div 
+                  key={n.id} 
+                  className={`nav-item${active === n.id ? ' active' : ''}`} 
+                  onClick={() => { onNav(n.id); onClose(); }}
+                >
+                  <span className="nav-icon">
                     <Icon name={n.id} />
                   </span>
                   <span>{n.label}</span>
@@ -71,40 +77,20 @@ export function Sidebar({ active, onNav, mobileOpen, onClose }) {
           ))}
         </div>
 
-        <div style={{
-          marginTop: 'auto',
-          borderTop: '1px solid rgba(255,255,255,0.06)',
-          padding: '12px 14px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          cursor: 'pointer',
-          userSelect: 'none'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              background: 'var(--gold)',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '12px',
-              fontWeight: 800
-            }}>
-              RA
+        <div className="sb-user-card" style={{ cursor: 'pointer' }}>
+          <div className="sb-avatar">RA</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              Rizki Ananda
             </div>
-            <div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>Rizki Ananda</div>
-              <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>Marketing Manager</div>
+            <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: '1px' }}>
+              Marketing Manager
             </div>
           </div>
-          <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>▼</span>
+          <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>▼</span>
         </div>
 
-        <div className="sb-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
+        <div className="sb-footer">
           © 2026 BT Batik Trusmi<br />
           Update: <span>15 Juli 2026, 15:07</span>
         </div>

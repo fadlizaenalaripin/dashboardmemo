@@ -1,15 +1,80 @@
 import { useState } from 'react';
 
+export function triggerConfetti() {
+  const canvas = document.createElement('canvas');
+  canvas.style.position = 'fixed';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.width = '100vw';
+  canvas.style.height = '100vh';
+  canvas.style.pointerEvents = 'none';
+  canvas.style.zIndex = '99999';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const pieces = [];
+  const numberOfPieces = 120;
+  const colors = ['#f43f5e', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ec4899', '#3b82f6', '#ffd700'];
+
+  for (let i = 0; i < numberOfPieces; i++) {
+    pieces.push({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 350,
+      y: canvas.height / 3 + (Math.random() - 0.5) * 100,
+      size: Math.random() * 9 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 14,
+      vy: Math.random() * -14 - 4,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 12,
+      opacity: 1
+    });
+  }
+
+  let startTime = Date.now();
+
+  function render() {
+    const elapsed = Date.now() - startTime;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    pieces.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.45; // gravity
+      p.rotation += p.rotationSpeed;
+      if (elapsed > 1200) p.opacity -= 0.025;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+      ctx.restore();
+    });
+
+    if (elapsed < 2400 && pieces.some(p => p.opacity > 0)) {
+      requestAnimationFrame(render);
+    } else {
+      canvas.remove();
+    }
+  }
+
+  render();
+}
+
 export function PTag({ platform }) {
   if (platform === 'instagram' || platform === 'ig') return <span className="ptag ptag-ig">📸 Instagram</span>;
   if (platform === 'tiktok' || platform === 'tt') return <span className="ptag ptag-tt">🎵 TikTok</span>;
-  return <span className="ptag ptag-neutral">{platform}</span>;
+  return <span className="ptag badge-neutral">{platform}</span>;
 }
 
-export function MetricCard({ icon, label, value, sub, trend, trendLabel, acc = '#C9A84C', badge }) {
+export function MetricCard({ icon, label, value, sub, trend, trendLabel, acc = '#F59E0B', badge }) {
   return (
     <div className="metric-card">
-      <div style={{ position: 'absolute', top: 0, left: 0, width: 3, height: '100%', background: acc }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${acc} 0%, transparent 100%)`, opacity: 0.8 }} />
       <div className="mc-header">
         <span className="mc-label">{label}</span>
         <span className="mc-icon">{icon}</span>
@@ -23,8 +88,8 @@ export function MetricCard({ icon, label, value, sub, trend, trendLabel, acc = '
             </span>
           )}
           {badge && <span className="badge badge-gold">{badge}</span>}
-          {trendLabel && <span>{trendLabel}</span>}
-          {sub && !trendLabel && <span>{sub}</span>}
+          {trendLabel && <span style={{ color: 'var(--text-muted)' }}>{trendLabel}</span>}
+          {sub && !trendLabel && <span style={{ color: 'var(--text-muted)' }}>{sub}</span>}
         </div>
       )}
     </div>
@@ -70,13 +135,13 @@ export function Modal({ open, onClose, title, children }) {
 
 export function ProgRow({ label, value, pct, color = 'var(--gold)' }) {
   return (
-    <div style={{ marginBottom: 10 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
+    <div style={{ marginBottom: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 5 }}>
         <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>{label}</span>
         <span style={{ color: 'var(--text-light)', fontWeight: 700 }}>{value} ({pct}%)</span>
       </div>
-      <div style={{ height: 6, background: 'var(--bg2)', borderRadius: 3, overflow: 'hidden' }}>
-        <div style={{ height: '100%', width: `${Math.min(pct, 100)}%`, background: color, borderRadius: 3, transition: 'width 0.4s' }} />
+      <div style={{ height: 7, background: 'rgba(30, 41, 59, 0.8)', borderRadius: 4, overflow: 'hidden', border: '1px solid var(--border)' }}>
+        <div style={{ height: '100%', width: `${Math.min(pct, 100)}%`, background: color, borderRadius: 4, transition: 'width 0.4s ease' }} />
       </div>
     </div>
   );
@@ -84,31 +149,31 @@ export function ProgRow({ label, value, pct, color = 'var(--gold)' }) {
 
 export function AccountCard({ name, handle, avatar, followers, growth, engagement, platform, onSelect }) {
   return (
-    <div className="card card-sm" style={{ cursor: 'pointer', transition: 'all 0.15s' }} onClick={onSelect}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+    <div className="card card-sm" style={{ cursor: 'pointer', transition: 'all 0.2s ease' }} onClick={onSelect}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--gold-pale2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: 'var(--gold)' }}>
+          <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'var(--gold-pale2)', border: '1px solid var(--border-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: 'var(--gold)' }}>
             {avatar || name.substring(0, 2).toUpperCase()}
           </div>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-white)' }}>{name}</div>
-            <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{handle}</div>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text-white)' }}>{name}</div>
+            <div style={{ fontSize: 10.5, color: 'var(--text-muted)' }}>{handle}</div>
           </div>
         </div>
         <PTag platform={platform} />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, background: 'var(--bg2)', padding: 8, borderRadius: 8, textAlign: 'center' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, background: 'rgba(30, 41, 59, 0.5)', border: '1px solid var(--border)', padding: 10, borderRadius: 8, textAlign: 'center' }}>
         <div>
-          <div style={{ fontSize: 9, color: 'var(--text-dim)' }}>Followers</div>
-          <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-white)' }}>{followers}</div>
+          <div style={{ fontSize: 9.5, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: 0.5 }}>Followers</div>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text-white)', marginTop: 2 }}>{followers}</div>
         </div>
         <div>
-          <div style={{ fontSize: 9, color: 'var(--text-dim)' }}>Growth</div>
-          <div style={{ fontSize: 12, fontWeight: 800, color: growth >= 0 ? 'var(--green)' : 'var(--red)' }}>{growth >= 0 ? `+${growth}%` : `${growth}%`}</div>
+          <div style={{ fontSize: 9.5, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: 0.5 }}>Growth</div>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: growth >= 0 ? 'var(--green)' : 'var(--red)', marginTop: 2 }}>{growth >= 0 ? `+${growth}%` : `${growth}%`}</div>
         </div>
         <div>
-          <div style={{ fontSize: 9, color: 'var(--text-dim)' }}>ER</div>
-          <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--gold)' }}>{engagement}</div>
+          <div style={{ fontSize: 9.5, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: 0.5 }}>ER</div>
+          <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--gold)', marginTop: 2 }}>{engagement}</div>
         </div>
       </div>
     </div>
@@ -117,18 +182,18 @@ export function AccountCard({ name, handle, avatar, followers, growth, engagemen
 
 export function TopPostRow({ rank, title, likes, comments, shares, views, platform, date }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--gold)', width: 16 }}>#{rank}</span>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--gold)', width: 20 }}>#{rank}</span>
         <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-white)' }}>{title}</div>
-          <div style={{ fontSize: 9, color: 'var(--text-muted)', display: 'flex', gap: 8, marginTop: 2 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-white)' }}>{title}</div>
+          <div style={{ fontSize: 10, color: 'var(--text-muted)', display: 'flex', gap: 8, marginTop: 3 }}>
             <span>{date}</span>
             <PTag platform={platform} />
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 12, fontSize: 10, color: 'var(--text-light)', fontWeight: 600 }}>
+      <div style={{ display: 'flex', gap: 14, fontSize: 11, color: 'var(--text-light)', fontWeight: 600 }}>
         {views && <span>👁️ {views}</span>}
         <span>❤️ {likes}</span>
         <span>💬 {comments}</span>
@@ -168,7 +233,6 @@ export function Calendar({ month, year, selectedStart, selectedEnd, onDayClick }
   }
 
   const weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-
   const formatDateString = (d) => d.toISOString().split('T')[0];
 
   const startStr = selectedStart ? formatDateString(new Date(selectedStart)) : '';
@@ -191,14 +255,14 @@ export function Calendar({ month, year, selectedStart, selectedEnd, onDayClick }
           let borderRadius = '0';
           
           if (isStart || isEnd) {
-            bg = '#3B82F6';
-            color = 'white';
+            bg = 'var(--gold)';
+            color = '#000';
             borderRadius = isStart ? '8px 0 0 8px' : '0 8px 8px 0';
             if (isStart && !endStr) borderRadius = '8px';
             if (isStart && isEnd) borderRadius = '8px';
           } else if (inRange) {
-            bg = '#DBEAFE';
-            color = '#1E40AF';
+            bg = 'var(--gold-pale2)';
+            color = 'var(--gold)';
           }
 
           return (

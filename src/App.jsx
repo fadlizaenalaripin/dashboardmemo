@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 
 import { NAV, INFO } from './data/mockData.js';
 import { Sidebar } from './components/layout/Sidebar.jsx';
-import { Modal, Calendar } from './components/common/UIComponents.jsx';
+import { Modal, Calendar, triggerConfetti } from './components/common/UIComponents.jsx';
 
 import { OverviewPage } from './pages/OverviewPage.jsx';
 import { InsightPage } from './pages/InsightPage.jsx';
@@ -43,6 +43,23 @@ export default function App() {
 
   const [baseMonth, setBaseMonth] = useState(5);
   const [baseYear, setBaseYear] = useState(2026);
+
+  // Live real-time clock state
+  const [timeStr, setTimeStr] = useState('');
+
+  useEffect(() => {
+    const updateClock = () => {
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      setTimeStr(`${hh}:${mm}:${ss} WIB`);
+    };
+
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const loading = document.getElementById('loading');
@@ -206,7 +223,7 @@ export default function App() {
       <Sidebar active={page} onNav={setPage} mobileOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
       <div className="main">
         <header className="topbar">
-          <div style={{display:'flex', alignItems:'center', gap:10}}>
+          <div style={{display:'flex', alignItems:'center', gap:12}}>
             <button 
               className="mobile-toggle"
               style={{
@@ -214,7 +231,7 @@ export default function App() {
                 border:'none',
                 fontSize:22,
                 cursor:'pointer',
-                color:'var(--text-dark)',
+                color:'var(--text-white)',
                 display:'none',
                 outline:'none'
               }}
@@ -229,22 +246,20 @@ export default function App() {
           </div>
           <div className="topbar-right">
             <button 
-              className="date-pill" 
-              style={{
-                background: 'var(--gold-pale)', 
-                color: 'var(--gold-dark)', 
-                border: '1px solid var(--gold)',
-                borderRadius: '20px',
-                padding: '6px 14px',
-                fontSize: '13px',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                transition: 'all 0.2s',
-                outline: 'none'
-              }}
+              className="celebrate-btn"
+              onClick={triggerConfetti}
+            >
+              🎉 Selebrasi!
+            </button>
+
+            {timeStr && (
+              <div className="clock-pill">
+                ⏰ {timeStr}
+              </div>
+            )}
+
+            <button 
+              className="date-pill-btn" 
               onClick={() => {
                 setTempPeriod(globalPeriod);
                 setTempRange(globalRange);
@@ -253,7 +268,11 @@ export default function App() {
             >
               {datePillText}
             </button>
-            <div className="live-pill">🟢 Live</div>
+
+            <div className="live-pill">
+              <span className="live-pulse"></span>
+              LIVE DATA
+            </div>
           </div>
         </header>
         {renderPage()}
@@ -262,21 +281,21 @@ export default function App() {
       <Modal open={dateModal} onClose={()=>setDateModal(false)} title="📅 Date Range Picker">
         <div style={{display:'flex', flexDirection:'column'}}>
           <div style={{display:'flex', gap:8, marginBottom:16}}>
-            <div style={{display:'flex', flex:1, border:'2px solid #3B82F6', borderRadius:8, overflow:'hidden'}}>
+            <div style={{display:'flex', flex:1, border:'1px solid var(--border-gold)', borderRadius:10, overflow:'hidden', background:'rgba(30, 41, 59, 0.6)'}}>
               <input
                 type="text"
                 disabled
-                style={{flex:1, border:'none', padding:'10px 14px', fontSize: 14, fontWeight:700, background:'#F8FAFC', color:'#3B4048'}}
+                style={{flex:1, border:'none', padding:'10px 14px', fontSize: 13, fontWeight:700, background:'transparent', color:'var(--text-white)'}}
                 value={tempRange.start && tempRange.end ? `${formatDateLong(tempRange.start)} - ${formatDateLong(tempRange.end)}` : 'Pilih rentang tanggal...'}
               />
-              <div style={{background:'#0ea5e9', display:'flex', alignItems:'center', justifyContent:'center', width:44, color:'white', fontWeight:800}}>
+              <div style={{background:'var(--gold-pale2)', display:'flex', alignItems:'center', justifyContent:'center', width:44, color:'var(--gold)', fontWeight:800}}>
                 🔍
               </div>
             </div>
           </div>
 
           <div style={{display:'flex', gap:18, minHeight: '340px'}}>
-            <div style={{display:'flex', flexDirection:'column', width:'130px', borderRight:'1px solid var(--bg2)', paddingRight:12, gap:6, flexShrink:0}}>
+            <div style={{display:'flex', flexDirection:'column', width:'140px', borderRight:'1px solid var(--border)', paddingRight:12, gap:6, flexShrink:0}}>
               {[
                 { id: 'today', label: 'Today' },
                 { id: 'yesterday', label: 'Yesterday' },
@@ -290,11 +309,11 @@ export default function App() {
                   key={o.id}
                   style={{
                     textAlign:'left',
-                    padding:'8px 10px',
-                    background:tempPeriod===o.id?'#3B82F6':'transparent',
-                    color:tempPeriod===o.id?'white':'var(--text-dark)',
-                    border:'none',
-                    borderRadius:6,
+                    padding:'8px 12px',
+                    background:tempPeriod===o.id?'var(--gold-pale2)':'transparent',
+                    color:tempPeriod===o.id?'var(--gold)':'var(--text-muted)',
+                    border:tempPeriod===o.id?'1px solid var(--gold)':'1px solid transparent',
+                    borderRadius:8,
                     fontWeight:700,
                     fontSize:12,
                     cursor:'pointer',
@@ -308,9 +327,9 @@ export default function App() {
             </div>
 
             <div style={{flex:1, display:'flex', flexDirection:'column', gap:20, overflowY:'auto', maxHeight:'340px', paddingRight:6}}>
-              <div style={{borderBottom:'1px solid var(--bg2)', paddingBottom:14}}>
-                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', fontWeight:800, fontSize:12, marginBottom:10, textTransform:'uppercase'}}>
-                  <span onClick={prevMonth} style={{cursor:'pointer', padding:'2px 8px', background:'var(--bg2)', borderRadius:4}}>❮</span>
+              <div style={{borderBottom:'1px solid var(--border)', paddingBottom:14}}>
+                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', fontWeight:800, fontSize:12, marginBottom:10, textTransform:'uppercase', color:'var(--gold)'}}>
+                  <span onClick={prevMonth} style={{cursor:'pointer', padding:'2px 8px', background:'rgba(30, 41, 59, 0.8)', borderRadius:4}}>❮</span>
                   <span>{new Date(baseYear, baseMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
                   <span style={{visibility:'hidden'}}>❯</span>
                 </div>
@@ -324,10 +343,10 @@ export default function App() {
               </div>
 
               <div>
-                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', fontWeight:800, fontSize:12, marginBottom:10, textTransform:'uppercase'}}>
+                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', fontWeight:800, fontSize:12, marginBottom:10, textTransform:'uppercase', color:'var(--gold)'}}>
                   <span style={{visibility:'hidden'}}>❮</span>
                   <span>{new Date(bottomYear, bottomMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-                  <span onClick={nextMonth} style={{cursor:'pointer', padding:'2px 8px', background:'var(--bg2)', borderRadius:4}}>❯</span>
+                  <span onClick={nextMonth} style={{cursor:'pointer', padding:'2px 8px', background:'rgba(30, 41, 59, 0.8)', borderRadius:4}}>❯</span>
                 </div>
                 <Calendar
                   month={bottomMonth}
@@ -340,22 +359,26 @@ export default function App() {
             </div>
           </div>
 
-          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', borderTop:'1px solid var(--bg2)', paddingTop:12, marginTop:12}}>
-            <div style={{fontSize:13, fontWeight:700, color:'var(--text-dark)'}}>
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', borderTop:'1px solid var(--border)', paddingTop:14, marginTop:14}}>
+            <div style={{fontSize:12.5, fontWeight:700, color:'var(--gold)'}}>
               {tempRange.start && tempRange.end ? `${formatDateLong(tempRange.start)} - ${formatDateLong(tempRange.end)}` : ''}
             </div>
             <div style={{display:'flex', gap:10}}>
-              <button className="btn btn-ghost" onClick={() => setDateModal(false)} style={{cursor:'pointer', border:'none', background:'transparent', fontSize:13, fontWeight:700}}>Cancel</button>
               <button 
-                className="btn" 
-                style={{background:'#1E40AF', color:'white', border:'none', padding:'8px 18px', borderRadius:8, fontSize:13, fontWeight:700, cursor:'pointer'}}
+                onClick={() => setDateModal(false)} 
+                style={{cursor:'pointer', border:'1px solid var(--border)', background:'transparent', color:'var(--text-muted)', padding:'8px 16px', borderRadius:8, fontSize:12, fontWeight:700}}
+              >
+                Batal
+              </button>
+              <button 
+                style={{background:'var(--gold)', color:'#000', border:'none', padding:'8px 18px', borderRadius:8, fontSize:12, fontWeight:800, cursor:'pointer', boxShadow:'0 0 12px rgba(245, 158, 11, 0.3)'}}
                 onClick={() => {
                   setGlobalPeriod(tempPeriod);
                   setGlobalRange(tempRange);
                   setDateModal(false);
                 }}
               >
-                Apply
+                Terapkan
               </button>
             </div>
           </div>
