@@ -20,7 +20,7 @@ export function DataManagementPage() {
       </div>
 
       <div className="card mb18">
-        <div className="card-title">⚙️ Status Integrasi API & Basis Data</div>
+        <div className="card-title">Status Integrasi API & Basis Data</div>
         <table className="data-table">
           <thead>
             <tr><th>Nama Service / API</th><th>Status Integrasi</th><th>Terakhir Sinkronisasi</th><th>Latency</th></tr>

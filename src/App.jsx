@@ -7,7 +7,6 @@ import { Modal, Calendar, triggerConfetti } from './components/common/UIComponen
 import { OverviewPage } from './pages/OverviewPage.jsx';
 import { InsightPage } from './pages/InsightPage.jsx';
 import { SalesDashboardPage } from './pages/SalesDashboardPage.jsx';
-import { TargetAchievementPage } from './pages/TargetAchievementPage.jsx';
 import { FunnelLeadsPage } from './pages/FunnelLeadsPage.jsx';
 import { ProductSalesPage } from './pages/ProductSalesPage.jsx';
 import { SalesDatabasePage } from './pages/SalesDatabasePage.jsx';
@@ -27,7 +26,31 @@ import { RetentionRepeatPage } from './pages/RetentionRepeatPage.jsx';
 import { VoiceCustomerPage } from './pages/VoiceCustomerPage.jsx';
 import { ReportPage } from './pages/ReportPage.jsx';
 import { DataManagementPage } from './pages/DataManagementPage.jsx';
-import { PlaceholderPage } from './pages/PlaceholderPage.jsx';
+function HeaderClock() {
+  const [timeStr, setTimeStr] = useState('');
+
+  useEffect(() => {
+    const updateClock = () => {
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      setTimeStr(`${hh}:${mm}:${ss} WIB`);
+    };
+
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!timeStr) return null;
+
+  return (
+    <div className="clock-pill">
+      ⏰ {timeStr}
+    </div>
+  );
+}
 
 export default function App() {
   const [page, setPage] = useState('overview');
@@ -44,22 +67,7 @@ export default function App() {
   const [baseMonth, setBaseMonth] = useState(5);
   const [baseYear, setBaseYear] = useState(2026);
 
-  // Live real-time clock state
-  const [timeStr, setTimeStr] = useState('');
 
-  useEffect(() => {
-    const updateClock = () => {
-      const d = new Date();
-      const hh = String(d.getHours()).padStart(2, '0');
-      const mm = String(d.getMinutes()).padStart(2, '0');
-      const ss = String(d.getSeconds()).padStart(2, '0');
-      setTimeStr(`${hh}:${mm}:${ss} WIB`);
-    };
-
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const loading = document.getElementById('loading');
@@ -187,7 +195,6 @@ export default function App() {
       case 'insight':               return <InsightPage period={resolvedPeriod} range={globalRange}/>;
       
       case 'sales_dashboard':       return <SalesDashboardPage period={resolvedPeriod} range={globalRange}/>;
-      case 'target_achievement':    return <TargetAchievementPage period={resolvedPeriod} range={globalRange}/>;
       case 'funnel_leads':          return <FunnelLeadsPage period={resolvedPeriod} range={globalRange}/>;
       case 'product_sales':         return <ProductSalesPage period={resolvedPeriod} range={globalRange}/>;
       case 'sales_database':        return <SalesDatabasePage period={resolvedPeriod} range={globalRange}/>;
@@ -252,11 +259,7 @@ export default function App() {
               🎉 Selebrasi!
             </button>
 
-            {timeStr && (
-              <div className="clock-pill">
-                ⏰ {timeStr}
-              </div>
-            )}
+            <HeaderClock />
 
             <button 
               className="date-pill-btn" 

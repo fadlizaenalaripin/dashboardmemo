@@ -6,7 +6,17 @@ export function LineChart({ labels, data, label = 'Data', color = '#C9A84C', hei
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    if (chartRef.current) chartRef.current.destroy();
+
+    if (chartRef.current) {
+      chartRef.current.data.labels = labels;
+      if (chartRef.current.data.datasets[0]) {
+        chartRef.current.data.datasets[0].data = data;
+        chartRef.current.data.datasets[0].borderColor = color;
+        chartRef.current.data.datasets[0].pointBackgroundColor = color;
+      }
+      chartRef.current.update('none');
+      return;
+    }
 
     const ctx = canvasRef.current.getContext('2d');
     let bgGradient = 'rgba(201,168,76,0.1)';
@@ -61,8 +71,13 @@ export function LineChart({ labels, data, label = 'Data', color = '#C9A84C', hei
       }
     });
 
-    return () => { if (chartRef.current) chartRef.current.destroy(); };
-  }, [labels, data, color, filled, height]);
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = null;
+      }
+    };
+  }, [labels, data, label, color, filled, height]);
 
   return (
     <div style={{ position: 'relative', height, width: '100%' }}>
@@ -77,7 +92,18 @@ export function MultiLineChart({ labels, datasets, height = 220 }) {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    if (chartRef.current) chartRef.current.destroy();
+
+    if (chartRef.current) {
+      chartRef.current.data.labels = labels;
+      chartRef.current.data.datasets = datasets.map(d => ({
+        tension: 0.35,
+        pointRadius: 3,
+        pointHoverRadius: 6,
+        ...d
+      }));
+      chartRef.current.update('none');
+      return;
+    }
 
     chartRef.current = new Chart(canvasRef.current, {
       type: 'line',
@@ -115,7 +141,12 @@ export function MultiLineChart({ labels, datasets, height = 220 }) {
       }
     });
 
-    return () => { if (chartRef.current) chartRef.current.destroy(); };
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = null;
+      }
+    };
   }, [labels, datasets, height]);
 
   return (
@@ -131,7 +162,16 @@ export function BarChart({ labels, data, label = 'Data', color = '#C9A84C', heig
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    if (chartRef.current) chartRef.current.destroy();
+
+    if (chartRef.current) {
+      chartRef.current.data.labels = labels;
+      if (chartRef.current.data.datasets[0]) {
+        chartRef.current.data.datasets[0].data = data;
+        chartRef.current.data.datasets[0].backgroundColor = color;
+      }
+      chartRef.current.update('none');
+      return;
+    }
 
     chartRef.current = new Chart(canvasRef.current, {
       type: 'bar',
@@ -165,7 +205,12 @@ export function BarChart({ labels, data, label = 'Data', color = '#C9A84C', heig
       }
     });
 
-    return () => { if (chartRef.current) chartRef.current.destroy(); };
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = null;
+      }
+    };
   }, [labels, data, color, height]);
 
   return (
@@ -181,7 +226,17 @@ export function MultiBarChart({ labels, datasets, height = 200 }) {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    if (chartRef.current) chartRef.current.destroy();
+
+    if (chartRef.current) {
+      chartRef.current.data.labels = labels;
+      chartRef.current.data.datasets = datasets.map(d => ({
+        borderRadius: 6,
+        borderSkipped: false,
+        ...d
+      }));
+      chartRef.current.update('none');
+      return;
+    }
 
     chartRef.current = new Chart(canvasRef.current, {
       type: 'bar',
@@ -218,7 +273,12 @@ export function MultiBarChart({ labels, datasets, height = 200 }) {
       }
     });
 
-    return () => { if (chartRef.current) chartRef.current.destroy(); };
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = null;
+      }
+    };
   }, [labels, datasets, height]);
 
   return (
@@ -234,7 +294,17 @@ export function ComboBarLineChart({ labels, datasets, height = 260 }) {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    if (chartRef.current) chartRef.current.destroy();
+
+    if (chartRef.current) {
+      chartRef.current.data.labels = labels;
+      chartRef.current.data.datasets = datasets.map(d => ({
+        borderRadius: 6,
+        borderSkipped: false,
+        ...d
+      }));
+      chartRef.current.update('none');
+      return;
+    }
 
     chartRef.current = new Chart(canvasRef.current, {
       type: 'bar',
@@ -279,7 +349,12 @@ export function ComboBarLineChart({ labels, datasets, height = 260 }) {
       }
     });
 
-    return () => { if (chartRef.current) chartRef.current.destroy(); };
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = null;
+      }
+    };
   }, [labels, datasets, height]);
 
   return (
@@ -300,7 +375,16 @@ export function DonutChart({ labels, data, colors, centerText, segments, cVal, c
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    if (chartRef.current) chartRef.current.destroy();
+
+    if (chartRef.current) {
+      chartRef.current.data.labels = displayLabels;
+      if (chartRef.current.data.datasets[0]) {
+        chartRef.current.data.datasets[0].data = displayData;
+        chartRef.current.data.datasets[0].backgroundColor = displayColors;
+      }
+      chartRef.current.update('none');
+      return;
+    }
 
     chartRef.current = new Chart(canvasRef.current, {
       type: 'doughnut',
@@ -333,7 +417,12 @@ export function DonutChart({ labels, data, colors, centerText, segments, cVal, c
       }
     });
 
-    return () => { if (chartRef.current) chartRef.current.destroy(); };
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = null;
+      }
+    };
   }, [displayLabels, displayData, displayColors]);
 
   const wrapperSize = size || 90;

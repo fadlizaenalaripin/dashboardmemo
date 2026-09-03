@@ -7,15 +7,15 @@ export function MarketingDashboardPage() {
       <SectionLabel badge="Marketing">Overview Aktivitas Pemasaran Momen</SectionLabel>
 
       <div className="g4 mb18">
-        <MetricCard icon="📢" label="Total Campaign Active" value="5 Campaign" sub="Meta, TikTok, Google" acc="#C9A84C" />
-        <MetricCard icon="👁️" label="Total Impressions / Reach" value="2.840.000" trend={18.4} acc="#3B82F6" />
-        <MetricCard icon="💸" label="Cost Per Lead (CPL)" value="Rp 13.570" trend={-6.2} trendLabel="Efisien" acc="#22C55E" />
-        <MetricCard icon="💰" label="Customer Acquisition Cost" value="Rp 42.300" sub="CAC Ratio 1:4" acc="#833AB4" />
+        <MetricCard label="Total Campaign Active" value="5 Campaign" sub="Meta, TikTok, Google" acc="#C9A84C" />
+        <MetricCard label="Total Impressions / Reach" value="2.840.000" trend={18.4} acc="#3B82F6" />
+        <MetricCard label="Cost Per Lead (CPL)" value="Rp 13.570" trend={-6.2} trendLabel="Efisien" acc="#22C55E" />
+        <MetricCard label="Customer Acquisition Cost" value="Rp 42.300" sub="CAC Ratio 1:4" acc="#833AB4" />
       </div>
 
       <div className="g2 mb18">
         <div className="card">
-          <div className="card-title">📊 Distibusi Budget Pemasaran</div>
+          <div className="card-title">Distibusi Budget Pemasaran</div>
           <DonutChart 
             labels={['Meta Ads', 'TikTok Ads', 'Google Ads', 'KOL / Influencer']} 
             data={[45, 30, 15, 10]} 
@@ -25,7 +25,7 @@ export function MarketingDashboardPage() {
         </div>
 
         <div className="card">
-          <div className="card-title">🎯 Status Pemasaran Digital</div>
+          <div className="card-title">Status Pemasaran Digital</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 10 }}>
             <div style={{ background: 'var(--bg2)', padding: 12, borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>

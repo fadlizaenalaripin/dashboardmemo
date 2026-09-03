@@ -18,7 +18,7 @@ export function CampaignPage() {
       </div>
 
       <div className="card mb18">
-        <div className="card-title">🎯 Campaign Marketing Active & Upcoming</div>
+        <div className="card-title">Campaign Marketing Active & Upcoming</div>
         <table className="data-table">
           <thead>
             <tr><th>Nama Kampanye</th><th>Status</th><th>Budget</th><th>Spent</th><th>ROAS</th></tr>

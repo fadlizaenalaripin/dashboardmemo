@@ -81,15 +81,24 @@ export function MetricCard({ icon, label, value, sub, trend, trendLabel, acc = '
       </div>
       <div className="mc-value">{value}</div>
       {(trend !== undefined || sub || badge) && (
-        <div className="mc-sub">
-          {trend !== undefined && (
-            <span className={`badge ${trend >= 0 ? 'badge-green' : 'badge-red'}`}>
-              {trend >= 0 ? `▲ +${trend}%` : `▼ ${trend}%`}
+        <div className="mc-sub" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {trend !== undefined && (
+              <span className={`badge ${trend >= 0 ? 'badge-green' : 'badge-red'}`}>
+                {trend >= 0 ? `▲ +${trend}%` : `▼ ${trend}%`}
+              </span>
+            )}
+            {sub && !trendLabel && <span style={{ color: 'var(--text-muted)' }}>{sub}</span>}
+            {trendLabel && <span style={{ color: 'var(--text-muted)' }}>{trendLabel}</span>}
+          </div>
+          {badge && (
+            <span 
+              className="badge badge-gold" 
+              style={acc ? { background: acc + '22', color: acc, border: `1px solid ${acc}44`, marginLeft: 'auto' } : { marginLeft: 'auto' }}
+            >
+              {badge}
             </span>
           )}
-          {badge && <span className="badge badge-gold">{badge}</span>}
-          {trendLabel && <span style={{ color: 'var(--text-muted)' }}>{trendLabel}</span>}
-          {sub && !trendLabel && <span style={{ color: 'var(--text-muted)' }}>{sub}</span>}
         </div>
       )}
     </div>
@@ -133,11 +142,14 @@ export function Modal({ open, onClose, title, children }) {
   );
 }
 
-export function ProgRow({ label, value, pct, color = 'var(--gold)' }) {
+export function ProgRow({ label, value, pct, color = 'var(--gold)', icon }) {
   return (
     <div style={{ marginBottom: 12 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 5 }}>
-        <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>{label}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5, marginBottom: 5 }}>
+        <span style={{ color: 'var(--text-muted)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 7 }}>
+          {icon}
+          {label}
+        </span>
         <span style={{ color: 'var(--text-light)', fontWeight: 700 }}>{value} ({pct}%)</span>
       </div>
       <div style={{ height: 7, background: 'rgba(30, 41, 59, 0.8)', borderRadius: 4, overflow: 'hidden', border: '1px solid var(--border)' }}>

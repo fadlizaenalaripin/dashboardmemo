@@ -19,7 +19,7 @@ export function VoiceCustomerPage() {
       </div>
 
       <div className="card mb18">
-        <div className="card-title">🗣️ Masukan & Aspirasi Utama Pelanggan (VOC)</div>
+        <div className="card-title">Masukan & Aspirasi Utama Pelanggan (VOC)</div>
         <table className="data-table">
           <thead>
             <tr><th>Topik Aspirasi / Masukan</th><th>Kategori Sentiment</th><th>Jumlah Permintaan</th><th>Prioritas Produk</th></tr>

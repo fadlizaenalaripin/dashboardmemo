@@ -19,20 +19,20 @@ export function TTPage({ period }) {
       <SectionLabel badge="TikTok">Analisis Performa TikTok Momen</SectionLabel>
 
       <div className="g4 mb18">
-        <MetricCard icon="🎵" label="Total Followers" value={ttData.followers} trend={ttData.growth} trendLabel="bulan ini" acc="#00f2fe" />
-        <MetricCard icon="👁️" label="Total Video Views" value={ttData.views} trend={24.2} trendLabel="vs bulan lalu" acc="#3B82F6" />
-        <MetricCard icon="⚡" label="Engagement Rate" value={ttData.engagement} trend={1.2} trendLabel="vs bulan lalu" acc="#22C55E" />
-        <MetricCard icon="🎥" label="Total Video Upload" value={36} sub="Bulan Juli 2026" acc="#C9A84C" />
+        <MetricCard label="Total Followers" value={ttData.followers} trend={ttData.growth} trendLabel="bulan ini" acc="#00f2fe" />
+        <MetricCard label="Total Video Views" value={ttData.views} trend={24.2} trendLabel="vs bulan lalu" acc="#3B82F6" />
+        <MetricCard label="Engagement Rate" value={ttData.engagement} trend={1.2} trendLabel="vs bulan lalu" acc="#22C55E" />
+        <MetricCard label="Total Video Upload" value={36} sub="Bulan Juli 2026" acc="#C9A84C" />
       </div>
 
       <div className="g21 mb18">
         <div className="card">
-          <div className="card-title">📈 Tren View Video TikTok</div>
+          <div className="card-title">Tren View Video TikTok</div>
           <LineChart labels={['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4']} data={[980000, 1120000, 1340000, 1360000]} color="#00f2fe" height={200} />
         </div>
 
         <div className="card">
-          <div className="card-title">🔥 Top Viral TikTok Videos</div>
+          <div className="card-title">Top Viral TikTok Videos</div>
           {ttData.posts.map(p => (
             <TopPostRow key={p.rank} {...p} />
           ))}

@@ -19,20 +19,20 @@ export function IGPage({ period }) {
       <SectionLabel badge="Instagram">Analisis Performa Instagram Momen</SectionLabel>
 
       <div className="g4 mb18">
-        <MetricCard icon="👥" label="Total Followers" value={igData.followers} trend={igData.growth} trendLabel="bulan ini" acc="#E1306C" />
-        <MetricCard icon="👀" label="Total Reach" value={igData.reach} trend={12.4} trendLabel="vs bulan lalu" acc="#F77737" />
-        <MetricCard icon="🔥" label="Engagement Rate" value={igData.engagement} trend={0.6} trendLabel="vs bulan lalu" acc="#C9A84C" />
-        <MetricCard icon="📸" label="Total Posts" value="48 Posts" sub="Bulan Juli 2026" acc="#833AB4" />
+        <MetricCard label="Total Followers" value={igData.followers} trend={igData.growth} trendLabel="bulan ini" acc="#E1306C" />
+        <MetricCard label="Total Reach" value={igData.reach} trend={12.4} trendLabel="vs bulan lalu" acc="#F77737" />
+        <MetricCard label="Engagement Rate" value={igData.engagement} trend={0.6} trendLabel="vs bulan lalu" acc="#C9A84C" />
+        <MetricCard label="Total Posts" value="48 Posts" sub="Bulan Juli 2026" acc="#833AB4" />
       </div>
 
       <div className="g21 mb18">
         <div className="card">
-          <div className="card-title">📈 Tren Jangkauan Instagram (Reach)</div>
+          <div className="card-title">Tren Jangkauan Instagram (Reach)</div>
           <LineChart labels={['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4']} data={[320000, 380000, 410000, 420000]} color="#E1306C" height={200} />
         </div>
 
         <div className="card">
-          <div className="card-title">🏆 Top Post Instagram</div>
+          <div className="card-title">Top Post Instagram</div>
           {igData.posts.map(p => (
             <TopPostRow key={p.rank} {...p} />
           ))}

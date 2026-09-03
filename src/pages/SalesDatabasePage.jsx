@@ -21,7 +21,7 @@ export function SalesDatabasePage() {
       </div>
 
       <div className="card mb18">
-        <div className="card-title">🗄️ Rekap Database Transaksi Terbaru</div>
+        <div className="card-title">Rekap Database Transaksi Terbaru</div>
         <table className="data-table">
           <thead>
             <tr><th>No Order</th><th>Pelanggan</th><th>Channel</th><th>Produk Dipesan</th><th>Total Nominal</th><th>Status</th><th>Tanggal & Waktu</th></tr>

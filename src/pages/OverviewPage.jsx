@@ -9,23 +9,23 @@ export function OverviewPage({ period }) {
       <SectionLabel badge="Performa Bisnis">Sales & Revenue Overview</SectionLabel>
 
       <div className="g4 mb18">
-        <MetricCard icon="🎯" label="Target Sales" value={d.salesOverview.target} sub="Periode 01 – 13 Jul" acc="#C9A84C" />
-        <MetricCard icon="💰" label="Pencapaian Omset" value={d.salesOverview.achievement.value} badge={d.salesOverview.achievement.pct} sub="vs target periode" acc="#22C55E" />
-        <MetricCard icon="📦" label="Total Qty Terjual" value={d.salesOverview.qty.value + ' pcs'} trend={d.salesOverview.qty.change} trendLabel="vs periode lalu" acc="#3B82F6" />
-        <MetricCard icon="💳" label="Nilai Keranjang (AOV)" value={d.salesOverview.basket.value} trend={d.salesOverview.basket.change} trendLabel="vs periode lalu" acc="#833AB4" />
+        <MetricCard label="Target Sales" value={d.salesOverview.target} sub="Periode 01 – 13 Jul" acc="#C9A84C" />
+        <MetricCard label="Pencapaian Omset" value={d.salesOverview.achievement.value} badge={d.salesOverview.achievement.pct} sub="vs target periode" acc="#22C55E" />
+        <MetricCard label="Total Qty Terjual" value={d.salesOverview.qty.value + ' pcs'} trend={d.salesOverview.qty.change} trendLabel="vs periode lalu" acc="#3B82F6" />
+        <MetricCard label="Nilai Keranjang (AOV)" value={d.salesOverview.basket.value} trend={d.salesOverview.basket.change} trendLabel="vs periode lalu" acc="#833AB4" />
       </div>
 
       <div className="g21 mb18">
         <div className="card">
           <div className="card-title">
-            <span>📈 Tren Penjualan Harian vs Target</span>
+            <span>Tren Penjualan Harian vs Target</span>
             <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Juli 2026</span>
           </div>
           <LineChart labels={d.trendLabels} data={d.trendActual} color="#C9A84C" height={200} />
         </div>
 
         <div className="card">
-          <div className="card-title">📊 Rincian Penjualan Channel</div>
+          <div className="card-title">Rincian Penjualan Channel</div>
           <DonutChart labels={d.breakdown.channel.labels} data={d.breakdown.channel.data} colors={d.breakdown.channel.colors} centerText="100%" />
           <div style={{ marginTop: 14 }}>
             {d.breakdown.channel.labels.map((l, i) => (

@@ -19,7 +19,7 @@ export function StockAvailabilityPage() {
       </div>
 
       <div className="card mb18">
-        <div className="card-title">🏬 Kapasitas & Status Stok Per Gudang</div>
+        <div className="card-title">Kapasitas & Status Stok Per Gudang</div>
         <table className="data-table">
           <thead>
             <tr><th>Lokasi Gudang</th><th>Stok Saat Ini</th><th>Kapasitas Maksimal</th><th>Status Gudang</th></tr>

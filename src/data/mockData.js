@@ -5,6 +5,9 @@ export const DATA = {
   salesOverview: {
     target: 'Rp 540.000.000',
     achievement: { pct: '37,38%', value: 'Rp 201.838.726' },
+    storeCirebon: { target: 'Rp 80.000.000', actual: 'Rp 32.400.000', pct: '40,5%' },
+    storeJakarta: { target: 'Rp 60.000.000', actual: 'Rp 20.888.726', pct: '34,8%' },
+    salesOnline: { target: 'Rp 400.000.000', actual: 'Rp 148.550.000', pct: '37,1%' },
     qty: { value: '1.248', change: -8.3 },
     transaksi: { value: '236', change: 12.6 },
     basket: { value: 'Rp 855.248', change: 5.2 },
@@ -63,7 +66,6 @@ export const NAV = [
   
   // SALES
   { id: 'sales_dashboard', icon: '📊', label: 'Sales Dashboard', sec: 'sales' },
-  { id: 'target_achievement', icon: '🎯', label: 'Target & Achievement', sec: 'sales' },
   { id: 'funnel_leads', icon: '⏳', label: 'Funnel & Leads', sec: 'sales' },
   { id: 'product_sales', icon: '🛍️', label: 'Product Sales', sec: 'sales' },
   { id: 'sales_database', icon: '🗄️', label: 'Sales Database', sec: 'sales' },
@@ -98,7 +100,6 @@ export const INFO = {
   insight: { title: 'Insight & Improvement', sub: 'Analisis rekomendasi dan peningkatan performa' },
   
   sales_dashboard: { title: 'Dashboard Sales Momen', sub: 'Target sales, realisasi, outstanding, transaksi, dan retensi' },
-  target_achievement: { title: 'Target & Achievement', sub: 'Pencapaian target penjualan sales' },
   funnel_leads: { title: 'Funnel & Leads', sub: 'Analisis konversi prospek dan leads funnel' },
   product_sales: { title: 'Product Sales', sub: 'Rincian penjualan produk Momen Batik' },
   sales_database: { title: 'Sales Database', sub: 'Database transaksi dan rekap order sales' },

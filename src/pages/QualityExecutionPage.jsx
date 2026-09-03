@@ -20,7 +20,7 @@ export function QualityExecutionPage() {
       </div>
 
       <div className="card mb18">
-        <div className="card-title">🎖️ Indikator Standar Kualitas & SLA Operasional</div>
+        <div className="card-title">Indikator Standar Kualitas & SLA Operasional</div>
         <table className="data-table">
           <thead>
             <tr><th>Indikator Kualitas</th><th>Nilai Capaian</th><th>Status</th><th>Catatan Evaluasi</th></tr>

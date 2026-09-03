@@ -13,7 +13,7 @@ export function RetentionRepeatPage() {
       </div>
 
       <div className="card mb18">
-        <div className="card-title">🔄 Cohort Pembelian Berulang Pelanggan (90 Hari)</div>
+        <div className="card-title">Cohort Pembelian Berulang Pelanggan (90 Hari)</div>
         <div style={{ marginTop: 10 }}>
           <ProgRow label="Bulan ke-1 (Pembelian Pertama)" value="1.248 Customer" pct={100} color="#3B82F6" />
           <ProgRow label="Bulan ke-2 (Repeat Order Pertama)" value="446 Customer" pct={35.8} color="#C9A84C" />

@@ -13,14 +13,14 @@ export function TargetAchievementPage() {
       <SectionLabel badge="Sales Team">Pencapaian Target Penjualan Tim Sales</SectionLabel>
 
       <div className="g4 mb18">
-        <MetricCard icon="🎯" label="Target Total Sales" value="Rp 540.000.000" sub="Juli 2026" acc="#C9A84C" />
-        <MetricCard icon="💰" label="Realisasi Total" value="Rp 201.838.726" badge="37.38%" acc="#22C55E" />
-        <MetricCard icon="⏳" label="Sisa Target" value="Rp 338.161.274" sub="18 Hari Tersisa" acc="#3B82F6" />
-        <MetricCard icon="🏆" label="Top Sales Executive" value="Siti Rahma" badge="48.6%" acc="#833AB4" />
+        <MetricCard label="Target Total Sales" value="Rp 540.000.000" sub="Juli 2026" acc="#C9A84C" />
+        <MetricCard label="Realisasi Total" value="Rp 201.838.726" badge="37.38%" acc="#22C55E" />
+        <MetricCard label="Sisa Target" value="Rp 338.161.274" sub="18 Hari Tersisa" acc="#3B82F6" />
+        <MetricCard label="Top Sales Executive" value="Siti Rahma" badge="48.6%" acc="#833AB4" />
       </div>
 
       <div className="card mb18">
-        <div className="card-title">📊 Rincian Performa & Bonus Per Sales Executive</div>
+        <div className="card-title">Rincian Performa & Bonus Per Sales Executive</div>
         <table className="data-table">
           <thead>
             <tr><th>Nama Sales</th><th>Target</th><th>Realisasi Omset</th><th>Pencapaian (%)</th><th>Estimasi Bonus</th></tr>
@@ -42,7 +42,7 @@ export function TargetAchievementPage() {
       </div>
 
       <div className="card mb18">
-        <div className="card-title">📈 Progress Pencapaian Visual</div>
+        <div className="card-title">Progress Pencapaian Visual</div>
         <div style={{ marginTop: 10 }}>
           {team.map((t, idx) => (
             <ProgRow key={idx} label={t.name} value={t.actual} pct={t.pct} color="var(--gold)" />
